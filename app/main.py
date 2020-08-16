@@ -1,7 +1,7 @@
 import random
 import app.database as database
 import os
-from flask import Flask, render_template, jsonify, make_response, request
+from flask import Flask, render_template, jsonify, make_response, request, redirect
 from app.models import db
 
 app = Flask(__name__)
@@ -14,13 +14,36 @@ print("DB connect successful")
 def home_view():
     return render_template('index.html')
 
-@app.route("/advisor-login")
+@app.route("/advisor-login", methods=["GET", "POST"])
 def advisor_login():
-    return render_template('advisor-login.html')
+    if request.method == 'GET':
+        return render_template('advisor-login.html')
+    else:
+        email = request.form['email']
+        password = request.form['password']
 
-@app.route("/advisor-signup")
+        ## MARCO ADD DATABASE LOG IN RIGHT HERE
+        #database.add_faculty(username, email, password, firstname, lastname)
+
+        return render_template('advisor-login.html', eml=email, pswd= password, callbackmsg=" successfully logged in!")
+
+@app.route("/advisor-signup", methods=["GET", "POST"])
 def advisor_signup():
-    return render_template('advisor-signup.html')
+    if request.method == 'GET':
+        return render_template('advisor-signup.html')
+    else:
+        username = request.form['username']
+        firstname = request.form['firstname']
+        lastname = request.form['lastname']
+        email = request.form['email']
+        password = request.form['password']
+
+        ## MARCO ADD DATABASE SIGN UP RIGHT HERE
+        #database.add_faculty(username, email, password, firstname, lastname)
+
+        return render_template('advisor-signup.html', usrnme=username, fstnme= firstname, lstnme= lastname, callbackmsg=" registered!")
+        
+
 
 
 @app.route('/insertandfind')  # , methods=["GET", "POST"])
