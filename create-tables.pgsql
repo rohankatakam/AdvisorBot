@@ -1,7 +1,7 @@
 DROP TABLE IF EXISTS departmentRecords;
 DROP TABLE IF EXISTS ticketRecords;
 DROP TABLE IF EXISTS appointmentRecords;
-DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS facultys;
 DROP TABLE IF EXISTS departments;
 DROP TABLE IF EXISTS roles;
 DROP TABLE IF EXISTS majors;
@@ -13,10 +13,9 @@ CREATE TABLE roles
     roleName TEXT NOT NULL
 );
 
-
-CREATE TABLE users
+CREATE TABLE facultys
 (
-    userId INT NOT NULL PRIMARY KEY GENERATED ALWAYS AS IDENTITY, -- primary key column
+    facultyId INT NOT NULL PRIMARY KEY GENERATED ALWAYS AS IDENTITY, -- primary key column
     username TEXT NOT NULL UNIQUE,
     email TEXT NOT NULL UNIQUE,
     password BYTEA NULL,
@@ -33,10 +32,10 @@ CREATE TABLE departments
 
 CREATE TABLE departmentRecords
 (
-    userId INT NOT NULL,
+    facultyId INT NOT NULL,
     departmentId INT NOT NULL,
-    PRIMARY KEY (userId, departmentId),
-    FOREIGN KEY(userId) REFERENCES users(userId) ON DELETE CASCADE,
+    PRIMARY KEY (facultyId, departmentId),
+    FOREIGN KEY(facultyId) REFERENCES facultys(facultyId) ON DELETE CASCADE,
     FOREIGN KEY(departmentId) REFERENCES departments(departmentId) ON DELETE CASCADE
 );
 
@@ -54,12 +53,13 @@ CREATE TABLE appointmentRecords
     appointmentEndTime TIMESTAMP NOT NULL,
     appointmentTopic TEXT NOT NULL,
     appointmentComment TEXT,
-    userId INT NOT NULL,
+    facultyId INT NOT NULL,
     studentId INT NOT NULL,
     studentEmail TEXT NOT NULL,
     majorId INT,
     departmentId INT NOT NULL,
-    FOREIGN KEY(userId) REFERENCES users(userId) ON DELETE CASCADE,
+    FOREIGN KEY(majorId) REFERENCES majors(majorId) ON DELETE CASCADE,
+    FOREIGN KEY(facultyId) REFERENCES facultys(facultyId) ON DELETE CASCADE,
     FOREIGN KEY(departmentId) REFERENCES departments(departmentId) ON DELETE CASCADE
 );
 
@@ -70,10 +70,12 @@ CREATE TABLE ticketRecords
     time TIMESTAMP NOT NULL,
     ticketTitle TEXT,
     ticketContent TEXT,
+    solved BOOLEAN NOT NULL,
     advisorId INT NOT NULL,
     studentEmail TEXT NOT NULL,
     departmentId INT NOT NULL,
     majorId INT,
-    FOREIGN KEY(advisorId) REFERENCES users(userId) ON DELETE CASCADE,
+    FOREIGN KEY(majorId) REFERENCES majors(majorId) ON DELETE CASCADE,
+    FOREIGN KEY(advisorId) REFERENCES facultys(facultyId) ON DELETE CASCADE,
     FOREIGN KEY(departmentId) REFERENCES departments(departmentId) ON DELETE CASCADE
 );
