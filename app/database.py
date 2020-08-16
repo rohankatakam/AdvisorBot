@@ -11,11 +11,12 @@ def generate_password_hash(password, salt):
     return hashlib.sha512(password.encode('utf-8') + salt).digest()
 
 
-def add_faculty(username, email, password):
+def add_faculty(username, email, password, firstname, lastname):
     salt = os.urandom(64)
     password_hash = generate_password_hash(password, salt)
     faculty = Faculties(username=username, email=email,
-                        password=password_hash, salt=salt)
+                        password=password_hash, salt=salt,
+                        firstname=firstname, lastname=lastname)
     db.session.add(faculty)
     db.session.commit()
     return faculty.facultyid
@@ -48,7 +49,9 @@ def add_appointment(studentemail,
                     appointmentdate,
                     appointmentstartTime,
                     appointmenttopic,
-                    appointmentcomment):
+                    appointmentcomment,
+                    studentfirstname,
+                    studentlastname):
     record = AppointmentRecords(studentemail=studentemail,
                                 facultyid=facultyid,
                                 majorid=majorid,
@@ -56,7 +59,9 @@ def add_appointment(studentemail,
                                 appointmentdate=appointmentdate,
                                 appointmentstartTime=appointmentstartTime,
                                 appointmenttopic=appointmenttopic,
-                                appointmentcomment=appointmentcomment)
+                                appointmentcomment=appointmentcomment,
+                                studentfirstname=studentfirstname,
+                                studentlastname=studentlastname)
     db.session.add(record)
     db.session.commit()
     return record.appointmentid
@@ -67,7 +72,9 @@ def add_ticket(studentemail,
                advisorid,
                departmentid,
                tickettitle,
-               ticketcontent):
+               ticketcontent,
+               studentfirstname,
+               studentlastname):
     t = TicketRecords(studentemail=studentemail,
                       majorid=majorid,
                       advisorid=advisorid,
@@ -75,6 +82,8 @@ def add_ticket(studentemail,
                       tickettitle=tickettitle,
                       ticketcontent=ticketcontent,
                       solved=False,
+                      studentfirstname=studentfirstname,
+                      studentlastname=studentlastname,
                       time=datetime.today().strftime('%Y-%m-%d-%H:%M:%S'))
     db.session.add(t)
     db.session.commit()
@@ -82,6 +91,12 @@ def add_ticket(studentemail,
 
 
 def find_appointment_by_id(appointmentid):
+    record = AppointmentRecords.query.filter(
+        AppointmentRecords.appointmentid == appointmentid).first
+    return record
+
+
+def find_appointment_by_faculty_id(appointmentid):
     record = AppointmentRecords.query.filter(
         AppointmentRecords.appointmentid == appointmentid).first
     return record
@@ -102,16 +117,23 @@ def find_faculty_by_id(facultyid):
 
 # Date is string formatted as YYYY-MM-DD
 # Output time is formatted as YYYY-MM-DD HH:MM:SS
+
+
 def find_appointment_slots(departmentid, date):
-    appointments = AppointmentRecords.query.join(
-        AppointmentRecords.departmentid == departmentid,
-        AppointmentRecords.appointmentdate == date).order_by(Faculties.username.asc())
+    appointments = db.session.query().join(Faculties, AppointmentRecords.facultyid == Faculties)\
+        .join(DepartmentRecords, AppointmentRecords.departmentid == DepartmentRecords.departmentid)\
+        .order_by(Faculties.username.asc())
 
     faculties = Faculties.query.order_by(Faculties.username.asc()).all()
     slots = {}
     for f in faculties:
         a = []
         for i in range(0, 8 * 2):
-            time = date + "{:02d}:{:02d}:00".format(9 + int(i/2), int(i % 2)*30)
+            time = date + \
+                "{:02d}:{:02d}:00".format(9 + int(i/2), int(i % 2)*30)
             a.append(time)
         slots[f.username] = a
+    if appointments is not None:
+        for appoint in appointments:
+            a = slots[appoint.facultyid]
+            appoint.appointmentstartTime

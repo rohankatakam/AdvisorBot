@@ -17,6 +17,8 @@ CREATE TABLE faculties
 (
     facultyid INT NOT NULL PRIMARY KEY GENERATED ALWAYS AS IDENTITY, -- primary key column
     username TEXT NOT NULL UNIQUE,
+    firstname TEXT NOT NULL,
+    lastname TEXT NOT NULL,
     email TEXT NOT NULL UNIQUE,
     password BYTEA NULL,
     salt BYTEA NOT NULL
@@ -57,6 +59,8 @@ CREATE TABLE appointmentRecords
     appointmentcomment TEXT,
     facultyid INT NOT NULL,
     studentid INT,
+    studentfirstname TEXT NOT NULL,
+    studentlastname TEXT NOT NULL,
     studentemail TEXT NOT NULL,
     majorid INT,
     departmentid INT NOT NULL,
@@ -74,6 +78,8 @@ CREATE TABLE ticketRecords
     ticketcontent TEXT,
     solved BOOLEAN NOT NULL,
     advisorid INT NOT NULL,
+    studentfirstname TEXT NOT NULL,
+    studentlastname TEXT NOT NULL,
     studentemail TEXT NOT NULL,
     departmentid INT NOT NULL,
     majorid INT,

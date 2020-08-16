@@ -13,6 +13,8 @@ class Faculties(db.Model):
     email = db.Column(db.Text, unique=True)
     password = db.Column(db.BINARY(64))
     salt = db.Column(db.BINARY(64))
+    firstname = db.Column(db.Text)
+    lastname = db.Column(db.Text)
     # roleid = db.Column(db.Integer, ForeignKey(Roles.roleid))
 
 class Departments(db.Model):
@@ -38,6 +40,8 @@ class AppointmentRecords(db.Model):
     facultyid = db.Column(db.Integer, ForeignKey(Faculties.facultyid), nullable=False)
     studentid = db.Column(db.Integer, nullable=True)
     studentemail = db.Column(db.Text, nullable=False)
+    studentfirstname = db.Column(db.Text)
+    studentlastname = db.Column(db.Text)
     majorid = db.Column(db.Integer, ForeignKey(Majors.majorid))
     departmentid = db.Column(db.Integer, ForeignKey(Departments.departmentid))
 
@@ -49,6 +53,8 @@ class TicketRecords(db.Model):
     ticketcontent = db.Column(db.Text)
     solved = db.Column(db.BOOLEAN, nullable=False)
     advisorid = db.Column(db.Integer, ForeignKey(Faculties.facultyid))
+    studentfirstname = db.Column(db.Text)
+    studentlastname = db.Column(db.Text)
     studentemail = db.Column(db.Text, nullable=False)
     departmentid = db.Column(db.Integer, ForeignKey(Departments.departmentid))
     majorid = db.Column(db.Integer, ForeignKey(Majors.majorid))
