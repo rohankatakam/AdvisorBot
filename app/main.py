@@ -9,6 +9,9 @@ app.config["SQLALCHEMY_DATABASE_URI"] = 'postgres://dhesngxpyjyuhk:dde3232f77863
 db.init_app(app)
 print("DB connect successful")
 
+database.add_department("UW CSE")
+database.add_faculty("asd","asdasd","asd","a","sd")
+database.add_department_record()
 
 @app.route("/")
 def home_view():

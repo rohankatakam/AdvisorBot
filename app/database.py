@@ -89,6 +89,23 @@ def add_ticket(studentemail,
     db.session.commit()
     return t.ticketid
 
+def find_faculty_by_id(facultyid):
+    return Faculties.query.filter(Faculties.facultyid == facultyid).first()
+
+def find_faculty_by_username(username):
+    return Faculties.query.filter(Faculties.username == username).first()
+
+def find_department_by_name(departmentname):
+    return Departments.query.filter(Departments.departmentname == departmentname).first()
+
+def find_department_by_id(departmentid):
+    return Departments.query.filter(Departments.departmentid == departmentid).first()
+
+def find_department_by_majorname(majorname):
+    return db.session.query(Departments)\
+        .join(Majors, Departments.departmentid == Majors.departmentid)\
+        .filter(Majors.majorname == majorname)
+
 
 def find_appointment_by_id(appointmentid):
     record = AppointmentRecords.query.filter(
@@ -111,17 +128,12 @@ def login(username, password):
     result = Faculties.query.filter(Faculties.password == password_hash)
     return result is not None
 
-
-def find_faculty_by_id(facultyid):
-    return Faculties.query.filter(Faculties.facultyid == facultyid).first()
-
 # Date is string formatted as YYYY-MM-DD
 # Output time is formatted as YYYY-MM-DD HH:MM:SS
-
-
 def find_appointment_slots(departmentid, date):
-    appointments = db.session.query().join(Faculties, AppointmentRecords.facultyid == Faculties)\
-        .join(DepartmentRecords, AppointmentRecords.departmentid == DepartmentRecords.departmentid)\
+    appointments = db.session.query(Faculties, AppointmentRecords)\
+        .join(Faculties, AppointmentRecords.facultyid == Faculties.facultyid)\
+        .filter(AppointmentRecords.departmentid == departmentid)\
         .order_by(Faculties.username.asc())
 
     faculties = Faculties.query.order_by(Faculties.username.asc()).all()
@@ -136,4 +148,7 @@ def find_appointment_slots(departmentid, date):
     if appointments is not None:
         for appoint in appointments:
             a = slots[appoint.facultyid]
-            appoint.appointmentstartTime
+            for i in range(len(a)):
+                if a[i] == appoint.starttime:
+                    a.remove[i]
+    return slots
