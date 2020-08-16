@@ -23,8 +23,8 @@ def advisor_login():
 
         ## MARCO ADD DATABASE LOG IN RIGHT HERE
         #database.add_faculty(username, email, password, firstname, lastname)
-
-        return render_template('advisor-login.html', eml=email, pswd= password, callbackmsg=" successfully logged in!")
+        status = database.emaillogin(email, password)
+        return render_template('advisor-login.html', eml=email, pswd= password, callbackmsg=" successfully logged in!" if status else " failed to log in!")
 
 @app.route("/advisor-signup", methods=["GET", "POST"])
 def advisor_signup():
@@ -39,7 +39,7 @@ def advisor_signup():
 
         ## MARCO ADD DATABASE SIGN UP RIGHT HERE
         #database.add_faculty(username, email, password, firstname, lastname)
-
+        database.add_faculty(username,email,password,firstname,lastname)
         return render_template('advisor-signup.html', usrnme=username, fstnme= firstname, lstnme= lastname, callbackmsg=" registered!")
         
 

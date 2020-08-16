@@ -140,8 +140,20 @@ def login(username, password):
     if faculty is None:
         return False
     password_hash = generate_password_hash(password, faculty.salt)
-    result = Faculties.query.filter(Faculties.password == password_hash)
+    result = Faculties.query.filter(Faculties.username == username)\
+        .filter(Faculties.password == password_hash)
     return result is not None
+
+def emaillogin(email, password):
+    faculty = Faculties.query.filter(
+        Faculties.email == email).with_entities(Faculties.salt).first()
+    if faculty is None:
+        return False
+    password_hash = generate_password_hash(password, faculty.salt)
+    result = Faculties.query.filter(Faculties.email == email)\
+        .filter(Faculties.password == password_hash)
+    return result is not None
+
 
 # Date is string formatted as YYYY-MM-DD
 # Output time is formatted as YYYY-MM-DD HH:MM:SS
