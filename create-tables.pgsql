@@ -1,6 +1,6 @@
-DROP TABLE IF EXISTS departmentRecords;
-DROP TABLE IF EXISTS ticketRecords;
-DROP TABLE IF EXISTS appointmentRecords;
+DROP TABLE IF EXISTS department_records;
+DROP TABLE IF EXISTS ticket_records;
+DROP TABLE IF EXISTS appointment_records;
 DROP TABLE IF EXISTS faculties;
 DROP TABLE IF EXISTS majors;
 DROP TABLE IF EXISTS departments;
@@ -32,7 +32,7 @@ CREATE TABLE departments
     departmentname TEXT NOT NULL
 );
 
-CREATE TABLE departmentRecords
+CREATE TABLE department_records
 (
     facultyid INT NOT NULL,
     departmentid INT NOT NULL,
@@ -49,12 +49,12 @@ CREATE TABLE majors
     FOREIGN KEY(departmentid) REFERENCES departments(departmentid) ON DELETE CASCADE
 );
 
-CREATE TABLE appointmentRecords
+CREATE TABLE appointment_records
 (
     appointmentid INT NOT NULL PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    appointmentdate DATE NOT NULL,
+    appointmentdate TEXT NOT NULL,
     appointmentstarttime TEXT NOT NULL,
-    appointmentendtime TEXT NOT NULL,
+    appointmentendtime TEXT,
     appointmenttopic TEXT NOT NULL,
     appointmentcomment TEXT,
     facultyid INT NOT NULL,
@@ -69,7 +69,7 @@ CREATE TABLE appointmentRecords
     FOREIGN KEY(departmentid) REFERENCES departments(departmentid) ON DELETE CASCADE
 );
 
-CREATE TABLE ticketRecords
+CREATE TABLE ticket_records
 (
     ticketid INT NOT NULL PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     studentid INT,

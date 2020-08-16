@@ -9,10 +9,6 @@ app.config["SQLALCHEMY_DATABASE_URI"] = 'postgres://dhesngxpyjyuhk:dde3232f77863
 db.init_app(app)
 print("DB connect successful")
 
-database.add_department("UW CSE")
-database.add_faculty("asd","asdasd","asd","a","sd")
-database.add_department_record()
-
 @app.route("/")
 def home_view():
     return render_template('index.html')
@@ -28,13 +24,21 @@ def advisor_signup():
 
 @app.route('/insertandfind')  # , methods=["GET", "POST"])
 def insertandfind():
-    id = database.add_faculty(str(random.randint(0, 4564546456)), str(
-        random.randint(0, 4564546456)), str(random.randint(0, 4564546456)))
-    faculty = database.find_faculty_by_id(id)
-    print(str(faculty.username))
-    print(str(faculty.email))
-    return "name" + str(str(faculty.username))
-    
+    # id = database.add_faculty(str(random.randint(0, 4564546456)), str(
+    #     random.randint(0, 4564546456)), str(random.randint(0, 4564546456)))
+    # faculty = database.find_faculty_by_id(id)
+    # print(str(faculty.username))
+    # print(str(faculty.email))
+    # did = database.add_department("UW CSE")
+    # fid = database.add_faculty("asd","asdasd","asd","a","sd")
+    # drid = database.add_department_record(
+    #     database.find_faculty_by_username("asd").facultyid,\
+    #     database.find_department_by_name("UW CSE").departmentid)
+    # mid = database.add_major("CS", database.find_department_by_name("UW CSE").departmentid)
+    # database.add_appointment("Asdasd", fid, mid, did, "2020-08-16", "10:00:00", "ddd", "ssss", "asd", "asd")
+    # print(str(database.find_appointment_slots(did, "2020-08-16")))
+    # return str(database.find_appointment_slots(did, "2020-08-16"))
+    return "bang"
 @app.route('/webhook', methods=['POST'])
 def webhook():
     req = request.get_json(silent=True, force=True)

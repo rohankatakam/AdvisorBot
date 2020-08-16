@@ -32,9 +32,9 @@ class Majors(db.Model):
 
 class AppointmentRecords(db.Model):
     appointmentid = db.Column(db.Integer, nullable=False, primary_key=True, autoincrement=True)
-    appointmentdate = db.Column(db.Date, nullable=False)
-    appointmentstartTime = db.Column(db.TEXT, nullable=False)
-    appointmentendTime = db.Column(db.TEXT, nullable=False)
+    appointmentdate = db.Column(db.TEXT, nullable=False)
+    appointmentstarttime = db.Column(db.TEXT, nullable=False)
+    appointmentendtime = db.Column(db.TEXT, nullable=True)
     appointmenttopic = db.Column(db.Text, nullable=False)
     appointmentcomment = db.Column(db.Text)
     facultyid = db.Column(db.Integer, ForeignKey(Faculties.facultyid), nullable=False)
