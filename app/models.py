@@ -1,5 +1,7 @@
-from app import db
+from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import BINARY, Table, Column, Integer, ForeignKey, DATE, TIMESTAMP, BOOLEAN
+
+db = SQLAlchemy()
 
 class Roles(db.Model):
     roleId = db.Column(db.Integer, nullable=False, primary_key=True)
