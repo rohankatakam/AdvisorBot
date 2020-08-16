@@ -13,7 +13,7 @@ CREATE TABLE roles
     roleName TEXT NOT NULL
 );
 
-CREATE TABLE facultys
+CREATE TABLE faculties
 (
     facultyId INT NOT NULL PRIMARY KEY GENERATED ALWAYS AS IDENTITY, -- primary key column
     username TEXT NOT NULL UNIQUE,
@@ -54,7 +54,7 @@ CREATE TABLE appointmentRecords
     appointmentTopic TEXT NOT NULL,
     appointmentComment TEXT,
     facultyId INT NOT NULL,
-    studentId INT NOT NULL,
+    studentId INT,
     studentEmail TEXT NOT NULL,
     majorId INT,
     departmentId INT NOT NULL,
@@ -66,7 +66,7 @@ CREATE TABLE appointmentRecords
 CREATE TABLE ticketRecords
 (
     ticketId INT NOT NULL PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    studentId INT NOT NULL,
+    studentId INT,
     time TIMESTAMP NOT NULL,
     ticketTitle TEXT,
     ticketContent TEXT,
