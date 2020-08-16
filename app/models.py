@@ -1,9 +1,13 @@
-from app import db
+from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Binary, Table, Column, Integer, ForeignKey
+
+db = SQLAlchemy()
+
 
 class roles(db.Model):
     roleId = db.Column(db.Integer, nullable=False, primary_key=True)
     roleName = db.Column(db.String(), nullable=False)
+
 
 class facultys(db.Model):
     facultyId = db.Column(db.Integer, primary_key=True)
