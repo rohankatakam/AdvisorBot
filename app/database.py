@@ -18,8 +18,10 @@ def add_faculty(username, email, password, firstname, lastname):
                         password=password_hash, salt=salt,
                         firstname=firstname, lastname=lastname)
     db.session.add(faculty)
+    db.session.flush()
+    id = faculty.facultyid
     db.session.commit()
-    return faculty.facultyid
+    return id
 
 
 def add_department_record(facultyid, departmentid):
@@ -31,15 +33,19 @@ def add_department_record(facultyid, departmentid):
 def add_department(departmentname):
     dep = Departments(departmentname=departmentname)
     db.session.add(dep)
+    db.session.flush()
+    id = dep.departmentid
     db.session.commit()
-    return dep.departmentid
+    return id
 
 
 def add_major(majorname, departmentid):
     major = Majors(majorname=majorname, departmentid=departmentid)
     db.session.add(major)
+    db.session.flush()
+    id = major.majorid
     db.session.commit()
-    return major.majorid
+    return id
 
 
 def add_appointment(studentemail,
@@ -57,14 +63,16 @@ def add_appointment(studentemail,
                                 majorid=majorid,
                                 departmentid=departmentid,
                                 appointmentdate=appointmentdate,
-                                appointmentstartTime=appointmentstartTime,
+                                appointmentstarttime=appointmentstartTime,
                                 appointmenttopic=appointmenttopic,
                                 appointmentcomment=appointmentcomment,
                                 studentfirstname=studentfirstname,
                                 studentlastname=studentlastname)
     db.session.add(record)
+    db.session.flush()
+    id = record.appointmentid
     db.session.commit()
-    return record.appointmentid
+    return id
 
 
 def add_ticket(studentemail,
@@ -86,19 +94,43 @@ def add_ticket(studentemail,
                       studentlastname=studentlastname,
                       time=datetime.today().strftime('%Y-%m-%d-%H:%M:%S'))
     db.session.add(t)
+    db.session.flush()
+    id = t.ticketid
     db.session.commit()
-    return t.ticketid
+    return id
+
+
+def find_faculty_by_id(facultyid):
+    return Faculties.query.filter(Faculties.facultyid == facultyid).first()
+
+
+def find_faculty_by_username(username):
+    return Faculties.query.filter(Faculties.username == username).first()
+
+
+def find_department_by_name(departmentname):
+    return Departments.query.filter(Departments.departmentname == departmentname).first()
+
+
+def find_department_by_id(departmentid):
+    return Departments.query.filter(Departments.departmentid == departmentid).first()
+
+
+def find_department_by_majorname(majorname):
+    return db.session.query(Departments)\
+        .join(Majors, Departments.departmentid == Majors.departmentid)\
+        .filter(Majors.majorname == majorname)
 
 
 def find_appointment_by_id(appointmentid):
     record = AppointmentRecords.query.filter(
-        AppointmentRecords.appointmentid == appointmentid).first
+        AppointmentRecords.appointmentid == appointmentid).first()
     return record
 
 
 def find_appointment_by_faculty_id(appointmentid):
     record = AppointmentRecords.query.filter(
-        AppointmentRecords.appointmentid == appointmentid).first
+        AppointmentRecords.appointmentid == appointmentid).first()
     return record
 
 
@@ -111,17 +143,14 @@ def login(username, password):
     result = Faculties.query.filter(Faculties.password == password_hash)
     return result is not None
 
-
-def find_faculty_by_id(facultyid):
-    return Faculties.query.filter(Faculties.facultyid == facultyid).first()
-
 # Date is string formatted as YYYY-MM-DD
 # Output time is formatted as YYYY-MM-DD HH:MM:SS
 
 
 def find_appointment_slots(departmentid, date):
-    appointments = db.session.query().join(Faculties, AppointmentRecords.facultyid == Faculties)\
-        .join(DepartmentRecords, AppointmentRecords.departmentid == DepartmentRecords.departmentid)\
+    appointments = db.session.query(AppointmentRecords)\
+        .join(Faculties)\
+        .filter(AppointmentRecords.departmentid == departmentid)\
         .order_by(Faculties.username.asc())
 
     faculties = Faculties.query.order_by(Faculties.username.asc()).all()
@@ -130,10 +159,13 @@ def find_appointment_slots(departmentid, date):
         a = []
         for i in range(0, 8 * 2):
             time = date + \
-                "{:02d}:{:02d}:00".format(9 + int(i/2), int(i % 2)*30)
+                " {:02d}:{:02d}:00".format(9 + int(i/2), int(i % 2)*30)
             a.append(time)
-        slots[f.username] = a
+        slots[f.facultyid] = a
     if appointments is not None:
         for appoint in appointments:
             a = slots[appoint.facultyid]
-            appoint.appointmentstartTime
+            for t in a:
+                if t == appoint.appointmentdate + " " + appoint.appointmentstarttime:
+                    a.remove(t)
+    return slots
