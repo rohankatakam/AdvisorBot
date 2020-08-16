@@ -1,7 +1,8 @@
 import random
 import app.database as database
 import os
-from flask import Flask, render_template
+from flask import Flask, render_template, jsonify, make_response, request
+import dialogflow
 from app.models import db
 
 app = Flask(__name__)
@@ -31,3 +32,23 @@ def insertandfind():
     print(str(faculty.username))
     print(str(faculty.email))
     return "name" + str(str(faculty.username))
+    
+@app.route('/webhook', methods=['POST'])
+def webhook():
+    req = request.get_json(silent=True, force=True)
+    action = req.get('queryResult').get('action')
+    if action == 'yes':
+        reply = {
+            "fulfillmentText": "Ok. Tickets booked successfully.",
+        }
+        return jsonify(reply)
+    elif action == 'getdate':
+        return jsonify(getAppoinmentDate(req))
+
+@app.route('/getAppoinmentDate')
+def getAppoinmentDate(req):
+    date = req.get('queryResult').get('parameters').get('date')
+    reply = {
+        "fulfillmentText": date
+    }
+    return reply

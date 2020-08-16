@@ -1,5 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import BINARY, Table, Column, Integer, ForeignKey, DATE, TIME, BOOLEAN, Text
+from sqlalchemy import BINARY, Table, Column, Integer, ForeignKey, DATE, TIMESTAMP, BOOLEAN, Text
 
 db = SQLAlchemy()
 
@@ -31,8 +31,8 @@ class Majors(db.Model):
 class AppointmentRecords(db.Model):
     appointmentid = db.Column(db.Integer, nullable=False, primary_key=True, autoincrement=True)
     appointmentdate = db.Column(db.Date, nullable=False)
-    appointmentstartTime = db.Column(db.TIME, nullable=False)
-    appointmentendTime = db.Column(db.TIME, nullable=False)
+    appointmentstartTime = db.Column(db.TEXT, nullable=False)
+    appointmentendTime = db.Column(db.TEXT, nullable=False)
     appointmenttopic = db.Column(db.Text, nullable=False)
     appointmentcomment = db.Column(db.Text)
     facultyid = db.Column(db.Integer, ForeignKey(Faculties.facultyid), nullable=False)
@@ -44,7 +44,7 @@ class AppointmentRecords(db.Model):
 class TicketRecords(db.Model):
     ticketid = db.Column(db.Integer, nullable=False, primary_key=True, autoincrement=True)
     studentid = db.Column(db.Date, nullable=True)
-    time = db.Column(db.TIMESTAMP, nullable=False)
+    time = db.Column(db.TEXT, nullable=False)
     tickettitle = db.Column(db.Text)
     ticketcontent = db.Column(db.Text)
     solved = db.Column(db.BOOLEAN, nullable=False)
