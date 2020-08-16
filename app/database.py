@@ -31,12 +31,14 @@ def add_department(departmentname):
     dep = Departments(departmentname=departmentname)
     db.session.add(dep)
     db.session.commit()
+    return dep.departmentid
 
 
-def add_major(majorname):
-    major = Majors(majorname=majorname)
+def add_major(majorname, departmentid):
+    major = Majors(majorname=majorname, departmentid=departmentid)
     db.session.add(major)
     db.session.commit()
+    return major.majorid
 
 
 def add_appointment(studentemail,
@@ -57,6 +59,7 @@ def add_appointment(studentemail,
                                 appointmentcomment=appointmentcomment)
     db.session.add(record)
     db.session.commit()
+    return record.appointmentid
 
 
 def add_ticket(studentemail,
@@ -72,9 +75,10 @@ def add_ticket(studentemail,
                       tickettitle=tickettitle,
                       ticketcontent=ticketcontent,
                       solved=False,
-                      time=int(time.time() * 1000.0))
+                      time=datetime.today().strftime('%Y-%m-%d-%H:%M:%S'))
     db.session.add(t)
     db.session.commit()
+    return t.ticketid
 
 
 def find_appointment_by_id(appointmentid):
@@ -96,7 +100,18 @@ def login(username, password):
 def find_faculty_by_id(facultyid):
     return Faculties.query.filter(Faculties.facultyid == facultyid).first()
 
+# Date is string formatted as YYYY-MM-DD
+# Output time is formatted as YYYY-MM-DD HH:MM:SS
+def find_appointment_slots(departmentid, date):
+    appointments = AppointmentRecords.query.join(
+        AppointmentRecords.departmentid == departmentid,
+        AppointmentRecords.appointmentdate == date).order_by(Faculties.username.asc())
 
-def find_faculty(departmentid, date):
-    pass
-    # appointments = AppointmentRecords.query.join
+    faculties = Faculties.query.order_by(Faculties.username.asc()).all()
+    slots = {}
+    for f in faculties:
+        a = []
+        for i in range(0, 8 * 2):
+            time = date + "{:02d}:{:02d}:00".format(9 + int(i/2), int(i % 2)*30)
+            a.append(time)
+        slots[f.username] = a
