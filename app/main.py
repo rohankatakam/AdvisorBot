@@ -2,7 +2,6 @@ import random
 import app.database as database
 import os
 from flask import Flask, render_template, jsonify, make_response, request
-import dialogflow
 from app.models import db
 
 app = Flask(__name__)
