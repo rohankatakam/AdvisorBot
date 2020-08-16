@@ -4,6 +4,7 @@ DROP TABLE IF EXISTS appointmentRecords;
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS departments;
 DROP TABLE IF EXISTS roles;
+DROP TABLE IF EXISTS majors;
 
 
 CREATE TABLE roles
@@ -39,6 +40,12 @@ CREATE TABLE departmentRecords
     FOREIGN KEY(departmentId) REFERENCES departments(departmentId) ON DELETE CASCADE
 );
 
+CREATE TABLE majors
+(
+    majorId INT NOT NULL PRIMARY KEY,
+    majorName TEXT NOT NULL
+);
+
 CREATE TABLE appointmentRecords
 (
     appointmentId INT NOT NULL PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
@@ -50,6 +57,7 @@ CREATE TABLE appointmentRecords
     userId INT NOT NULL,
     studentId INT NOT NULL,
     studentEmail TEXT NOT NULL,
+    majorId INT,
     departmentId INT NOT NULL,
     FOREIGN KEY(userId) REFERENCES users(userId) ON DELETE CASCADE,
     FOREIGN KEY(departmentId) REFERENCES departments(departmentId) ON DELETE CASCADE
@@ -65,6 +73,7 @@ CREATE TABLE ticketRecords
     advisorId INT NOT NULL,
     studentEmail TEXT NOT NULL,
     departmentId INT NOT NULL,
+    majorId INT,
     FOREIGN KEY(advisorId) REFERENCES users(userId) ON DELETE CASCADE,
     FOREIGN KEY(departmentId) REFERENCES departments(departmentId) ON DELETE CASCADE
 );
