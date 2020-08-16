@@ -109,13 +109,13 @@ def find_department_by_majorname(majorname):
 
 def find_appointment_by_id(appointmentid):
     record = AppointmentRecords.query.filter(
-        AppointmentRecords.appointmentid == appointmentid).first
+        AppointmentRecords.appointmentid == appointmentid).first()
     return record
 
 
 def find_appointment_by_faculty_id(appointmentid):
     record = AppointmentRecords.query.filter(
-        AppointmentRecords.appointmentid == appointmentid).first
+        AppointmentRecords.appointmentid == appointmentid).first()
     return record
 
 
