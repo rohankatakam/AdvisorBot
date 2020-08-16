@@ -2,7 +2,6 @@ import random
 import app.database as database
 import os
 from flask import Flask, render_template, jsonify, make_response, request
-import dialogflow
 from app.models import db
 
 app = Flask(__name__)
@@ -14,6 +13,14 @@ print("DB connect successful")
 @app.route("/")
 def home_view():
     return render_template('index.html')
+
+@app.route("/advisor-login")
+def advisor_login():
+    return render_template('advisor-login.html')
+
+@app.route("/advisor-signup")
+def advisor_signup():
+    return render_template('advisor-signup.html')
 
 
 @app.route('/insertandfind')  # , methods=["GET", "POST"])
