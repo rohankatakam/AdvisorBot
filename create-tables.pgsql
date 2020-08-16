@@ -51,8 +51,8 @@ CREATE TABLE appointmentRecords
 (
     appointmentid INT NOT NULL PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     appointmentdate DATE NOT NULL,
-    appointmentstarttime TIME NOT NULL,
-    appointmentendtime TIME NOT NULL,
+    appointmentstarttime TEXT NOT NULL,
+    appointmentendtime TEXT NOT NULL,
     appointmenttopic TEXT NOT NULL,
     appointmentcomment TEXT,
     facultyid INT NOT NULL,
@@ -69,7 +69,7 @@ CREATE TABLE ticketRecords
 (
     ticketid INT NOT NULL PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     studentid INT,
-    time TIMESTAMP NOT NULL,
+    time TEXT NOT NULL,
     tickettitle TEXT,
     ticketcontent TEXT,
     solved BOOLEAN NOT NULL,
