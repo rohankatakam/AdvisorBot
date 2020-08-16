@@ -5,20 +5,20 @@ import datetime
 from flask import current_app
 from app.models import *
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.orm import *
 
 
 def generate_password_hash(password, salt):
     return hashlib.sha512(password.encode('utf-8') + salt).digest()
 
 
-def add_user(username, email, password):
+def add_faculty(username, email, password):
     salt = os.urandom(64)
     password_hash = generate_password_hash(password, salt)
     faculty = Faculties(username=username, email=email,
                         password=password_hash, salt=salt)
     db.session.add(faculty)
     db.session.commit()
+    return faculty.facultyid
 
 
 def add_department_record(facultyid, departmentid):
@@ -77,12 +77,26 @@ def add_ticket(studentemail,
     db.session.commit()
 
 
-def find_appointments(appointmentid):
+def find_appointment_by_id(appointmentid):
     record = AppointmentRecords.query.filter(
-        AppointmentRecords.appointmentid == appointmentid)
+        AppointmentRecords.appointmentid == appointmentid).first
     return record
 
 
-# def find_advisor(major, date):
-#     department = Majors.query.join(
-#         Departments, Majors.departmentid == Majors.departmentid).add_columns(users)
+def login(username, password):
+    faculty = Faculties.query.filter(
+        Faculties.username == username).with_entities(Faculties.salt).first()
+    if faculty is None:
+        return False
+    password_hash = generate_password_hash(password, faculty.salt)
+    result = Faculties.query.filter(Faculties.password == password_hash)
+    return result is not None
+
+
+def find_faculty_by_id(facultyid):
+    return Faculties.query.filter(Faculties.facultyid == facultyid).first()
+
+
+def find_faculty(departmentid, date):
+    pass
+    # appointments = AppointmentRecords.query.join
