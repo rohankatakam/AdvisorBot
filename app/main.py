@@ -14,6 +14,14 @@ print("DB connect successful")
 def home_view():
     return render_template('index.html')
 
+@app.route("/advisor-login")
+def advisor_login():
+    return render_template('advisor-login.html')
+
+@app.route("/advisor-signup")
+def advisor_signup():
+    return render_template('advisor-signup.html')
+
 
 @app.route('/insertandfind')  # , methods=["GET", "POST"])
 def insertandfind():
