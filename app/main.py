@@ -1,8 +1,8 @@
 import random
-import database as database
+import app.database as database
 import os
 from flask import Flask, render_template
-from models import db
+from app.models import db
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = 'postgres://dhesngxpyjyuhk:dde3232f7786335f0653d63bc3a30f2a9b8d10a29d6d5c217696d5b24415876b@ec2-52-204-20-42.compute-1.amazonaws.com:5432/d2pefa1md93jr9'

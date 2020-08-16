@@ -3,7 +3,7 @@ import os
 import time
 import datetime
 from flask import current_app
-from models import *
+from app.models import *
 from flask_sqlalchemy import SQLAlchemy
 
 
